@@ -4,9 +4,9 @@ pipeline {
         imageName = 'watcharee01/demo'
         port = 80
     }
-
+    
     stages {
-       stage('Build') {
+       stage('Build') { 
           agent any
           steps {
               sh "docker --version"
@@ -14,13 +14,13 @@ pipeline {
           }
        }
 
-       stage('Package') {
+       stage('Package') { 
           agent {label 'mgr1'}
           steps {
             withCredentials(
                 [usernamePassword(
-                    credentialsId: 'docker_hub',
-                    passwordVariable: 'dockerHubPassword',
+                    credentialsId: 'docker_hub', 
+                    passwordVariable: 'dockerHubPassword', 
                     usernameVariable: 'dockerHubUser'
                 )]
             ){
@@ -30,7 +30,7 @@ pipeline {
           }
        }
 
-       stage('Deploy') {
+       stage('Deploy') { 
           agent {label 'mgr1'}
           steps {
               script {
@@ -38,7 +38,7 @@ pipeline {
                     sh "docker service update --image ${env.imageName} demo"
                     sh "echo update service"
                   } catch (e){
-                    sh "docker service create --name demo -p ${env.port}:80 ${env.imageName}"
+                    sh "docker service create --name demo -p 80:80 ${env.imageName}"
                     sh "echo create service"
                   }
               }
